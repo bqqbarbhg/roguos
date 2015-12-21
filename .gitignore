@@ -1,0 +1,8 @@
+# Vagrant files
+.vagrant/
+
+# Build output files
+bin/
+
+# Provisioning log
+provisioning/provisioning.log
