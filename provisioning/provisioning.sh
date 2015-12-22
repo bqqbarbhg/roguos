@@ -33,6 +33,9 @@ else
             ftp://ftp.gnu.org/gnu/binutils/${BINUTILS_VER}.tar.bz2 &>> $LOG
     tar jxf ${GCC_VER}.tar.bz2 &>> $LOG
     tar jxf ${BINUTILS_VER}.tar.bz2 &>> $LOG
+
+    rm -f ${GCC_VER}.tar.bz2 &>> $LOG
+    rm -f ${BINUTILS_VER}.tar.bz2 &>> $LOG
 fi
 
 echo 'Installing prerequisites'
@@ -40,14 +43,15 @@ echo 'Installing prerequisites'
 sudo apt-get -qy install g++ libmpfr-dev libgmp3-dev libmpc-dev \
                     flex bison texinfo &>> $LOG
 
+sudo apt-get -qy upgrade xorriso
 
 # Vagrant runs out of memory when building GCC, so use a swapfile
 SWAP=/tmp/swap
 if [ -f $SWAP ]; then
     echo 'Found swapfile'
 else
-
     echo 'Creating swapfile'
+
     dd if=/dev/zero of=$SWAP bs=1M count=500 &>> $LOG
     mkswap $SWAP &>> $LOG
     sudo swapon $SWAP &>> $LOG
@@ -104,6 +108,9 @@ else
 
     cd ../.. &>> $LOG
 fi
+
+sudo swapoff $SWAP &>> $LOG
+rm -f $SWAP &>> $LOG
 
 echo 'Done!'
 
